@@ -8,7 +8,8 @@ It is a boilerplate Node js Mongo db and Expressjs Restful api. User can registe
 
 3)Run npm start
 
-Open Postman and hit the route for registering the users at localhost://5000/api/users/register with name email and password.
-Then login with your email and password at localhost://5000/api/users/login
+Open Postman and hit the route for registering the users at ```http://localhost:5000/api/users/register``` with name email and password.
+Then login with your email and password at  ```http://localhost:5000/api/users/login```
+
 
 Make sure you have mongoDb installed or you can use mongoDb Atlas just edit the environment variable MONGO_URI with the url of your atlas database
