@@ -14,7 +14,7 @@ const login = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
+      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -27,7 +27,7 @@ const login = asyncHandler(async (req, res) => {
 //@route    POST api/users/register
 //@access   Public
 const register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   const userExist = await User.findOne({ email });
 
   if (userExist) {
@@ -35,14 +35,14 @@ const register = asyncHandler(async (req, res) => {
     throw new Error('User already Exist');
   }
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, email, password, role });
 
   if (user) {
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
+      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -77,8 +77,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: generateToken(updatedUser._id),
+      role: updatedUser.role,
+      token: generateToken(updatedUser._id), //token should already be there
+      //can use updatedUser.token
     });
   } else {
     res.status(404);
