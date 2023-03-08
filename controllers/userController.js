@@ -92,16 +92,10 @@ const getPublicBoard = asyncHandler(async (req,res)=>{
   res.status(200).send("Public Content");
 })
 
-const getSubscriberBoard = asyncHandler(async (req,res)=>{
-  res.status(200).send("Subscriber Board Content");
-});
 
-const getBusinessBoard = asyncHandler(async (req,res)=>{
-  res.status(200).send("Business Board Content");
-});
 
 const getAdminBoard = asyncHandler(async (req,res)=>{
   res.status(200).send("Admin Board Content");
 })
 
-export { login, register, getUsers, updateUserProfile, getPublicBoard, getSubscriberBoard, getBusinessBoard, getAdminBoard};
+export { login, register, getUsers, updateUserProfile, getPublicBoard,getAdminBoard};
