@@ -18,8 +18,8 @@ const login = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401);
-    throw new Error('Invalid email or Password');
+    return res.status(401).json({message: 'Invalid email or Password'});
+    // throw new Error('Invalid email or Password');
   }
 });
 
@@ -31,8 +31,9 @@ const register = asyncHandler(async (req, res) => {
   const userExist = await User.findOne({ email });
 
   if (userExist) {
-    res.status(400);
-    throw new Error('User already Exist');
+    //rather than throwing an error, return error message
+    return res.status(400).json({message: "Email already exists"});
+    // throw new Error('User already Exist');
   }
 
   const user = await User.create({ name, email, password, role });
@@ -46,8 +47,8 @@ const register = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error('Invalid User Data');
+    return res.status(400).json({message: "Invalid User Data"});
+    // throw new Error('Invalid User Data');
   }
 });
 
@@ -87,4 +88,18 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { login, register, getUsers, updateUserProfile };
+const getPublicBoard = asyncHandler(async (req,res)=>{
+  res.status(200).send("Public Content");
+})
+
+const getSubscriberBoard = asyncHandler(async (req,res)=>{
+  res.status(200).send("Subscriber Board Content");
+});
+
+const getBusinessBoard = asyncHandler(async (req,res)=>{
+  res.status(200).send("Business Board Content");
+});
+
+
+
+export { login, register, getUsers, updateUserProfile, getPublicBoard, getSubscriberBoard, getBusinessBoard };
