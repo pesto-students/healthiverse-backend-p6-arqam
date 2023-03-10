@@ -2,7 +2,8 @@ import express from 'express';
 
 import{
   getSubscriberBoard,
-  getGyms
+  getGyms,
+  createProfile
 } from '../controllers/subscriberController.js';
 
 const subscriberRouter = express.Router();

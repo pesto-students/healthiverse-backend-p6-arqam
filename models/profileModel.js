@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      required: true,
+    },
     about: {
       type: String,
     },
@@ -25,11 +29,6 @@ const profileSchema = new mongoose.Schema(
       required: true,
     },
     mode: {
-      type: String,
-      required: true,
-    },
-
-    _id: {
       type: String,
       required: true,
     },
