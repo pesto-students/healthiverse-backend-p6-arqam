@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const profileSchema = new mongoose.Schema(
+const subscriberSchema = new mongoose.Schema(
   {
     _id: {
       type: String,
@@ -40,5 +40,5 @@ const profileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Profile = mongoose.model("Profile", profileSchema);
-export default Profile;
+const Subscriber = mongoose.model("Subscriber", subscriberSchema);
+export default Subscriber;
