@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const email=req.body.email;
+  const email = req.body.email;
   const { _id } = await User.findOne({ email });
 
   const profile = await Business.updateOne(
@@ -19,3 +19,4 @@ const createBusinessProfile = asyncHandler(async (req, res) => {
   }
 });
 export { createBusinessProfile };
+// comment
