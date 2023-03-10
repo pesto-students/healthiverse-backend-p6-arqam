@@ -1,26 +1,47 @@
-import asyncHandler from 'express-async-handler';
-import Subscriber from '../models/subscriberModel.js';
+import asyncHandler from "express-async-handler";
+import Subscriber from "../models/subscriberModel.js";
 
+// const getSubscriberBoard = asyncHandler(async (req, res) => {
+//   res.status(200).send("Subscriber Board Content");
+// });
 
-const getSubscriberBoard = asyncHandler(async (req,res)=>{
-  res.status(200).send("Subscriber Board Content");
-});
-
-
-const getGyms = asyncHandler(async (req,res)=>{
+const getGyms = asyncHandler(async (req, res) => {
   res.status(200).send("List of gyms");
 });
 
-const createSubscriber = asyncHandler(async (req,res)=>{
+const createSubscriberProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { _id } = req.body;
-  const subscriberModel = await Subscriber.updateOne({_id: _id},{...req.body},{upsert: true});
-  if (subscriberModel){
-    res.status(200).send("Subscriber profile created");
-  }else{
+  const subscriberProfile = await Subscriber.updateOne(
+    { _id: _id },
+    { ...req.body },
+    { upsert: true }
+  );
+  if (subscriberProfile) {
+    res.status(200).json({ data: req.body });
+  } else {
     res.status(400).send("Unable to create subscriber profile");
   }
-})
+});
 
+const getSubscriberProfile = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const subscriberProfile = await Subscriber.findOne({ _id: _id });
+  if (subscriberProfile) {
+    const profile = {
+      _id: subscriberProfile._id,
+      about: subscriberProfile.about,
+      height: subscriberProfile.height,
+      weight: subscriberProfile.weight,
+      lifestyle: subscriberProfile.lifestyle,
+      goals: subscriberProfile.goals,
+      mode: subscriberProfile.mode,
+      role: subscriberProfile.role,
+    };
+    return res.status(200).json(profile);
+  }
 
-export { getSubscriberBoard, getGyms, createSubscriber};
+  return res.status(400).send("Profile not found");
+});
+
+export { getGyms, createSubscriberProfile, getSubscriberProfile };
