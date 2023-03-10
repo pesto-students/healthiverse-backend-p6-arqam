@@ -1,17 +1,16 @@
-import express from 'express';
+import express from "express";
 
-import{
+import {
   getSubscriberBoard,
   getGyms,
-  createProfile
-} from '../controllers/subscriberController.js';
+  createSubscriber,
+} from "../controllers/subscriberController.js";
 
 const subscriberRouter = express.Router();
 
+subscriberRouter.get("/", getSubscriberBoard);
+subscriberRouter.get("/browse", getGyms);
 
-subscriberRouter.get('/', getSubscriberBoard);
-subscriberRouter.get('/browse',getGyms);
-
-subscriberRouter.post("/", createProfile);
+subscriberRouter.post("/", createSubscriber);
 
 export default subscriberRouter;

@@ -18,5 +18,9 @@ const createBusinessProfile = asyncHandler(async (req, res) => {
     res.status(400).send("Unable to create profile");
   }
 });
-export { createBusinessProfile };
-// comment
+
+const getClients = asyncHandler(async (req,res)=>{
+  res.status(200).send("List of clients");
+});
+//my comment
+export { getBusinessBoard, getClients};
