@@ -8,6 +8,7 @@ import {
   getAdminBoard,
 } from "../controllers/userController.js";
 import subscriberRouter from "./subscriberRoutes.js";
+import businessRouter from "./businessRoutes.js";
 import { admin, protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
@@ -19,6 +20,6 @@ router.get("/all", getPublicBoard);
 
 router.use("/subscriber", protect, subscriberRouter);
 
-// router.get('/business',protect,getBusinessBoard);
+router.use("/business", protect, businessRouter);
 router.get("/admin", protect, admin, getAdminBoard);
 export default router;
