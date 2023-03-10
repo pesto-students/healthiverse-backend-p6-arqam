@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema(
   {
@@ -12,22 +12,27 @@ const profileSchema = new mongoose.Schema(
     },
 
     weight: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
 
     lifestyle: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
     goals: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
     mode: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
+
+    _id: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       required: true,
@@ -36,7 +41,5 @@ const profileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-
-const Profile = mongoose.model('Profile', profileSchema);
+const Profile = mongoose.model("Profile", profileSchema);
 export default Profile;
