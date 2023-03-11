@@ -47,14 +47,21 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
 const buyMembership = asyncHandler(async (req, res) => {
   // const businessID = req.params.id;
   const { businessID, endDate } = req.body;
-  const { _id } = req.user;
-  const subscriber = await Subscriber.findOne({ _id: _id });
-  if (subscriber) {
+  const { subscriberID } = req.user;
+  const subscriber = await Subscriber.findOne({ _id: subscriberID });
+  const business = await Business.findOne({ _id: businessID });
+
+  if (subscriber && business) {
     subscriber.membership.push({
       businessID: businessID,
       endDate: endDate,
     });
+    business.clients.push({
+      subscriberID: subscriberID,
+      endDate: endDate,
+    });
     const updatedSubsciber = await subscriber.save();
+    await business.save();
     res.send(200).json({ message: updatedSubsciber.membership });
   } else {
     res.status(400).send("Subscriber not found");
