@@ -1,6 +1,7 @@
-import User from '../models/userModel.js';
-import asyncHandler from 'express-async-handler';
-import generateToken from '../utils/generateToken.js';
+import User from "../models/userModel.js";
+import asyncHandler from "express-async-handler";
+import generateToken from "../utils/generateToken.js";
+import Business from "../models/businessModel.js";
 
 //@desc     Auth User & Get Token
 //@route    POST api/users/login
@@ -18,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    return res.status(401).json({message: 'Invalid email or Password'});
+    return res.status(401).json({ message: "Invalid email or Password" });
     // throw new Error('Invalid email or Password');
   }
 });
@@ -32,7 +33,7 @@ const register = asyncHandler(async (req, res) => {
 
   if (userExist) {
     //rather than throwing an error, return error message
-    return res.status(400).json({message: "Email already exists"});
+    return res.status(400).json({ message: "Email already exists" });
     // throw new Error('User already Exist');
   }
 
@@ -47,7 +48,7 @@ const register = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    return res.status(400).json({message: "Invalid User Data"});
+    return res.status(400).json({ message: "Invalid User Data" });
     // throw new Error('Invalid User Data');
   }
 });
@@ -84,18 +85,43 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not Found');
+    throw new Error("User not Found");
   }
 });
 
-const getPublicBoard = asyncHandler(async (req,res)=>{
-  res.status(200).send("Public Content");
-})
+const getBusiness = asyncHandler(async (req, res) => {
+  try {
+    const businesses = await Business.find().select("-clients");
+    const allBusinesses = {
+      gym: [],
+      trainer: [],
+      dietician: [],
+    };
+    businesses.forEach((business) => {
+      if (business.businessType === "gym") {
+        allBusinesses.gym.push(business);
+      } else if (business.businessType === "trainer") {
+        allBusinesses.trainer.push(business);
+      } else if (business.businessType === "dietician") {
+        allBusinesses.dietician.push(business);
+      }
+    });
+    return res.json(allBusinesses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
 
-
-
-const getAdminBoard = asyncHandler(async (req,res)=>{
+const getAdminBoard = asyncHandler(async (req, res) => {
   res.status(200).send("Admin Board Content");
-})
+});
 
-export { login, register, getUsers, updateUserProfile, getPublicBoard,getAdminBoard};
+export {
+  login,
+  register,
+  getUsers,
+  updateUserProfile,
+  getBusiness,
+  getAdminBoard,
+};

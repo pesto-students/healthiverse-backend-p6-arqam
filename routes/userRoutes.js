@@ -4,7 +4,7 @@ import {
   login,
   register,
   updateUserProfile,
-  getPublicBoard,
+  getBusiness,
   getAdminBoard,
 } from "../controllers/userController.js";
 import subscriberRouter from "./subscriberRoutes.js";
@@ -16,7 +16,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/", protect, admin, getUsers);
 router.put("/", protect, updateUserProfile);
-router.get("/all", getPublicBoard);
+router.get("/getbusiness", getBusiness);
 
 router.use("/subscriber", protect, subscriberRouter);
 
