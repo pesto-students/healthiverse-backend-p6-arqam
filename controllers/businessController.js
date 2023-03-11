@@ -2,7 +2,6 @@ import Business from "../models/businessModel.js";
 import asyncHandler from "express-async-handler";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { _id, name } = req.user;
   const profile = await Business.updateOne(
     { _id: _id },
@@ -20,7 +19,6 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const businessProfile = await Business.findOne({ _id: _id });
   if (businessProfile) {
-    console.log(businessProfile);
     const profile = {
       _id: _id,
       businessType: businessProfile.businessType,
