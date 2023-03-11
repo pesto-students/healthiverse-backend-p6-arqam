@@ -36,6 +36,10 @@ const subscriberSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    membership: [{
+      businessID: String,
+      endDate: Date,
+    }],
     userimage: {
       Type: String,
     },

@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const { _id } = req.body;
+  const { _id } = req.user;
   const profile = await Business.updateOne(
     { _id: _id },
     { ...req.body },
@@ -22,7 +22,7 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
   if (businessProfile) {
     console.log(businessProfile);
     const profile = {
-      _id: businessProfile._id,
+      _id: _id,
       about: businessProfile.about,
       address: businessProfile.address,
       contact: businessProfile.contact,
