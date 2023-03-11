@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Subscriber from "../models/subscriberModel.js";
+import Business from "../models/businessModel.js";
 
 // const getSubscriberBoard = asyncHandler(async (req, res) => {
 //   res.status(200).send("Subscriber Board Content");
@@ -14,7 +15,7 @@ const createSubscriberProfile = asyncHandler(async (req, res) => {
   const { _id, role } = req.user;
   const subscriberProfile = await Subscriber.updateOne(
     { _id: _id },
-    { ...req.body, _id: _id, role:role },
+    { ...req.body, _id: _id, role: role },
     { upsert: true }
   );
   if (subscriberProfile) {
@@ -40,8 +41,29 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
     };
     return res.status(200).json(profile);
   }
-
   return res.status(400).send("Profile not found");
 });
 
-export { getGyms, createSubscriberProfile, getSubscriberProfile };
+const buyMembership = asyncHandler(async (req, res) => {
+  // const businessID = req.params.id;
+  const { businessID, endDate } = req.body;
+  const { _id } = req.user;
+  const subscriber = await Subscriber.findOne({ _id: _id });
+  if (subscriber) {
+    subscriber.membership.push({
+      businessID: businessID,
+      endDate: endDate,
+    });
+    const updatedSubsciber = await subscriber.save();
+    res.send(200).json({ message: updatedSubsciber.membership });
+  } else {
+    res.status(400).send("Subscriber not found");
+  }
+});
+
+export {
+  getGyms,
+  createSubscriberProfile,
+  getSubscriberProfile,
+  buyMembership,
+};
