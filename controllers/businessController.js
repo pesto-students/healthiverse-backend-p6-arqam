@@ -1,6 +1,5 @@
 import Business from "../models/businessModel.js";
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
@@ -17,8 +16,26 @@ const createBusinessProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getBusinessProfile = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const businessProfile = await Business.findOne({ _id: _id });
+  if (businessProfile) {
+    console.log(businessProfile);
+    const profile = {
+      _id: businessProfile._id,
+      about: businessProfile.about,
+      address: businessProfile.address,
+      contact: businessProfile.contact,
+      activities: businessProfile.activities,
+      openTime: businessProfile.openTime,
+      membership: businessProfile.membership,
+    };
+    return res.status(200).json(profile);
+  }
+});
+
 const getClients = asyncHandler(async (req, res) => {
   res.status(200).send("List of clients");
 });
 //my comment
-export { createBusinessProfile, getClients };
+export { createBusinessProfile, getBusinessProfile, getClients };

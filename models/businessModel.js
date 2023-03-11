@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
-import User from "../models/userModel.js";
 
 const businessSchema = new mongoose.Schema(
   {
@@ -18,14 +17,41 @@ const businessSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
     contact: {
-      type: String,
+      type: Number,
       required: true,
     },
-    type: {
-      type: String,
+    activities: {
+      type: [String],
       required: true,
+    },
+    openTime: {
+      from: {
+        type: String,
+        required: true,
+      },
+      to: {
+        type: String,
+        required: true,
+      },
+    },
+    membership: {
+      one: {
+        type: String,
+        required: true,
+      },
+      three: {
+        type: String,
+        required: true,
+      },
+      six: {
+        type: String,
+        required: true,
+      },
+      twelve: {
+        type: String,
+        required: true,
+      },
     },
     userimage: {
       Type: String,
@@ -34,5 +60,5 @@ const businessSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const BusinessProfile = mongoose.model("Business", businessSchema);
-export default BusinessProfile;
+const Business = mongoose.model("Business", businessSchema);
+export default Business;

@@ -11,10 +11,10 @@ const getGyms = asyncHandler(async (req, res) => {
 
 const createSubscriberProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const { _id } = req.body;
+  const { _id, role } = req.user;
   const subscriberProfile = await Subscriber.updateOne(
     { _id: _id },
-    { ...req.body },
+    { ...req.body, _id: _id, role:role },
     { upsert: true }
   );
   if (subscriberProfile) {
@@ -28,6 +28,7 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const subscriberProfile = await Subscriber.findOne({ _id: _id });
   if (subscriberProfile) {
+    console.log(subscriberProfile);
     const profile = {
       _id: subscriberProfile._id,
       about: subscriberProfile.about,
@@ -36,7 +37,6 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
       lifestyle: subscriberProfile.lifestyle,
       goals: subscriberProfile.goals,
       mode: subscriberProfile.mode,
-      role: subscriberProfile.role,
     };
     return res.status(200).json(profile);
   }
