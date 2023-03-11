@@ -23,8 +23,11 @@ const businessSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    businessType: {
+      type: String,
+      required: true,
+    },
     activities: [{ type: String }],
-
     openTime: {
       from: {
         type: String,
