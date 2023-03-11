@@ -6,7 +6,7 @@ const createBusinessProfile = asyncHandler(async (req, res) => {
   const { _id, name } = req.user;
   const profile = await Business.updateOne(
     { _id: _id },
-    { ...req.body , _id: _id, name: name},
+    { ...req.body, _id: _id, name: name },
     { upsert: true }
   );
   if (profile) {
@@ -23,6 +23,7 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
     console.log(businessProfile);
     const profile = {
       _id: _id,
+      businessType: businessProfile.businessType,
       about: businessProfile.about,
       address: businessProfile.address,
       contact: businessProfile.contact,
