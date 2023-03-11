@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const subscriberSchema = new mongoose.Schema(
   {
-    _id: {
-      type: String,
-      required: true,
-    },
+    __id: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     about: {
       type: String,
     },
