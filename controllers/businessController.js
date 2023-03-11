@@ -32,6 +32,7 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
     };
     return res.status(200).json(profile);
   }
+  res.status(400).send("Profile not found");
 });
 
 const getClients = asyncHandler(async (req, res) => {
