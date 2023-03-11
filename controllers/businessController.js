@@ -3,10 +3,10 @@ import asyncHandler from "express-async-handler";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const { _id } = req.user;
+  const { _id, name } = req.user;
   const profile = await Business.updateOne(
     { _id: _id },
-    { ...req.body },
+    { ...req.body , _id: _id, name: name},
     { upsert: true }
   );
   if (profile) {

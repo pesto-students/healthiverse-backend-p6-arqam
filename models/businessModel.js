@@ -3,12 +3,14 @@ const { Schema } = mongoose;
 
 const businessSchema = new mongoose.Schema(
   {
-    _id: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    name: {
+      type: String,
+      required: true,
+    },
     about: {
       type: String,
     },
@@ -51,10 +53,12 @@ const businessSchema = new mongoose.Schema(
         required: true,
       },
     },
-    clients: [{
-      subscriberID: String,
-      endDate: Date,
-    }],
+    clients: [
+      {
+        subscriberID: String,
+        endDate: Date,
+      },
+    ],
     userimage: {
       Type: String,
     },

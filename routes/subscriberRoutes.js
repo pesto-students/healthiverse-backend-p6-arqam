@@ -14,6 +14,6 @@ subscriberRouter.get("/browse", getGyms);
 
 subscriberRouter.post("/", createSubscriberProfile);
 
-subscriberRouter.post("/browse/:id/buy", buyMembership);
+subscriberRouter.post("/buy", buyMembership);
 
 export default subscriberRouter;

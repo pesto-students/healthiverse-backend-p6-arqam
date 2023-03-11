@@ -3,16 +3,17 @@ const { Schema } = mongoose;
 
 const subscriberSchema = new mongoose.Schema(
   {
-    __id: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    name: {
+      type: String,
+      required: true,
+    },
     about: {
       type: String,
     },
-
     height: {
       type: String,
       required: true,
@@ -35,14 +36,12 @@ const subscriberSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    role: {
-      type: String,
-      required: true,
-    },
-    membership: [{
-      businessID: String,
-      endDate: Date,
-    }],
+    membership: [
+      {
+        businessID: String,
+        endDate: Date,
+      },
+    ],
     userimage: {
       Type: String,
     },
