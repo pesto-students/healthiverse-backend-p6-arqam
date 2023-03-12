@@ -1,5 +1,7 @@
 import Business from "../models/businessModel.js";
+import Subscriber from "../models/subscriberModel.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   const { _id, name } = req.user;
@@ -35,7 +37,35 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
 });
 
 const getClients = asyncHandler(async (req, res) => {
-  res.status(200).send("List of clients");
+  try {
+    const { _id } = req.user;
+    console.log(_id);
+    const businessID = mongoose.Types.ObjectId(_id);
+    const businessone = await Business.findOne({ _id: businessID });
+    const clients = [];
+
+    for (const client of businessone.clients) {
+      const subscriber = await Subscriber.findOne({ _id: client.subscriberID });
+
+      if (subscriber) {
+        clients.push({
+          name: subscriber.name,
+          goals: subscriber.goals,
+          height: subscriber.height,
+          lifestyle: subscriber.lifestyle,
+          mode: subscriber.mode,
+          weight: subscriber.weight,
+          endDate: client.endDate,
+        });
+      }
+    }
+    console.log(clients);
+    return res.status(200).json(clients);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+  // res.status(200).send("List of clients");
 });
 //my comment
 export { createBusinessProfile, getBusinessProfile, getClients };
