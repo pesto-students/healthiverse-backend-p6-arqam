@@ -56,12 +56,6 @@ const businessSchema = new mongoose.Schema(
         required: true,
       },
     },
-    clients: [
-      {
-        subscriberID: String,
-        endDate: Date,
-      },
-    ],
     userimage: {
       Type: String,
     },

@@ -48,12 +48,9 @@ const buyMembership = asyncHandler(async (req, res) => {
       businessID: businessID,
       endDate: endDate,
     });
-    business.clients.push({
-      subscriberID: subscriberID,
-      endDate: endDate,
-    });
+
     const updatedSubsciber = await subscriber.save();
-    await business.save();
+
     res.send(200).json({ message: updatedSubsciber.membership });
   } else {
     res.status(400).send("Subscriber not found");

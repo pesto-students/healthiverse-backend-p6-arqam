@@ -19,19 +19,19 @@ const createBusinessProfile = asyncHandler(async (req, res) => {
 
 const getBusinessProfile = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const businessProfile = await Business.findOne({ _id: _id });
+  const businessProfile = await Business.findOne(
+    { _id: _id },
+    {
+      businessType: 1,
+      about: 1,
+      address: 1,
+      contact: 1,
+      activities: 1,
+      membership: 1,
+    }
+  );
   if (businessProfile) {
-    const profile = {
-      _id: _id,
-      businessType: businessProfile.businessType,
-      about: businessProfile.about,
-      address: businessProfile.address,
-      contact: businessProfile.contact,
-      activities: businessProfile.activities,
-      openTime: businessProfile.openTime,
-      membership: businessProfile.membership,
-    };
-    return res.status(200).json(profile);
+    return res.status(200).json(businessProfile);
   }
   res.status(400).send("Profile not found");
 });
@@ -39,33 +39,27 @@ const getBusinessProfile = asyncHandler(async (req, res) => {
 const getClients = asyncHandler(async (req, res) => {
   try {
     const { _id } = req.user;
-    console.log(_id);
+
     const businessID = mongoose.Types.ObjectId(_id);
-    const businessone = await Business.findOne({ _id: businessID });
-    const clients = [];
+    const subscribers = await Subscriber.find({
+      "membership.businessID": businessID,
+    });
+    const onlySubscribers = await Subscriber.find({
+      "membership.businessID": businessID,
+    }).select("-membership");
+    const subscriberEndDates = subscribers.map((subscriber) => ({
+        ...onlySubscribers,
+        ...{endDate: subscriber.membership[0].endDate,
+      },
+      
+    }));
+    
 
-    for (const client of businessone.clients) {
-      const subscriber = await Subscriber.findOne({ _id: client.subscriberID });
-
-      if (subscriber) {
-        clients.push({
-          name: subscriber.name,
-          goals: subscriber.goals,
-          height: subscriber.height,
-          lifestyle: subscriber.lifestyle,
-          mode: subscriber.mode,
-          weight: subscriber.weight,
-          endDate: client.endDate,
-        });
-      }
-    }
-    console.log(clients);
-    return res.status(200).json(clients);
+    return res.status(200).json(subscriberEndDates);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
   }
-  // res.status(200).send("List of clients");
 });
-//my comment
+
 export { createBusinessProfile, getBusinessProfile, getClients };
