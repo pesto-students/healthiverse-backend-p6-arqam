@@ -17,7 +17,6 @@ const businessSchema = new mongoose.Schema(
 
     address: {
       type: String,
-      required: true,
     },
     contact: {
       type: Number,
