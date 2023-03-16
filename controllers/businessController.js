@@ -44,18 +44,25 @@ const getClients = asyncHandler(async (req, res) => {
     const subscribers = await Subscriber.find({
       "membership.businessID": businessID,
     });
-    const onlySubscribers = await Subscriber.find({
-      "membership.businessID": businessID,
-    }).select("-membership");
-    const subscriberEndDates = subscribers.map((subscriber) => ({
-        ...onlySubscribers,
-        ...{endDate: subscriber.membership[0].endDate,
-      },
-      
-    }));
-    
+    const subscriberBusinessIDs = subscribers.flatMap((subscriber) =>
+    subscriber.membership
+      .filter((m) => (m.businessID == businessID) )
+      .map((m) => ({
+        _id: subscriber._id,
+        name : subscriber.name,
+        about: subscriber.about,
+        goals: subscriber.goals,
+        height: subscriber.height,
+        lifestyle: subscriber.lifestyle,
+        mode: subscriber.mode,
+        weight: subscriber.weight,
+        businessID: m.businessID,
+        endDate: m.endDate,
+      }))
+  );
+  
 
-    return res.status(200).json(subscriberEndDates);
+  return res.status(200).json(subscriberBusinessIDs);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
