@@ -1,4 +1,4 @@
-import Message from "../models/messages";
+import Message from "../models/messages.js";
 
 const saveMessage = async (data) => {
   try {
@@ -10,15 +10,18 @@ const saveMessage = async (data) => {
   }
 };
 
-const getMessages = async (room) => {
+const getMessages = async (roomId) => {
   try {
-    const messages = await Message.find({ room: room })
-      .sort({ __createdTime__: 1 })
-      .limit(50);
-    return messages;
+    const allMessages = await Message.find({}).sort({ __createdTime__: 1 });
+    const roomMessages = await allMessages.filter((message) => {
+      return message.matchRoomId(roomId);
+    });
+    const last50 =  roomMessages.slice(-50);
+    console.log(last50);
+    return last50;
   } catch (err) {
     console.log(err);
-    throw new Error(err);
+    return [];
   }
 };
 
