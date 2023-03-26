@@ -20,23 +20,24 @@ const socketio = (server) => {
         );
         socket.decoded = decoded;
         next();
-      } catch(err) {
-            console.log(err);          
+      } catch (err) {
+        console.log(err);
       }
     }
   }).on("connection", (socket) => {
     console.log(`User connected ${socket.id}`);
 
     socket.on("join_room", (data) => {
-      const {senderRole, receiverId} = data;
+      
+      const { senderType, receiver } = data;
       const senderId = socket.decoded.id;
       let roomId = "";
-      if(senderRole==="subscriber"){
-         roomId = senderId+"+"+receiverId;
-      }else{
-         roomId = receiverId+"+"+senderId;
+      if (senderType === "subscriber") {
+        roomId = senderId + "+" + receiver._id + "+" + receiver.s_id;
+      } else {
+        // roomId = receiver.s_id + "+" + receiver.businessId + "+" + senderId;
       }
-      
+      console.log(roomId);
       socket.join(roomId);
 
       getMessages(roomId).then((messages) => {
@@ -45,14 +46,15 @@ const socketio = (server) => {
     });
 
     socket.on("send_message", (data) => {
-      const {senderRole, receiverId} = data;
+      const { senderType, receiver } = data;
       const senderId = socket.decoded.id;
       let roomId = "";
-      if(senderRole==="subscriber"){
-         roomId = senderId+"+"+receiverId;
-      }else{
-         roomId = receiverId+"+"+senderId;
+      if (senderType === "subscriber") {
+        roomId = senderId + "+" + receiver._id + "+" + receiver.s_id;
+      } else {
+        roomId = receiver.s_id + "+" + receiver.businessId + "+" + senderId;
       }
+      data.receiverId = receiver.s_id;
       data.roomId = roomId;
       console.log(data);
       io.in(roomId).emit("receive_message", data);

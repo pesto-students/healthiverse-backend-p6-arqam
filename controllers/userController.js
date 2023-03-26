@@ -12,10 +12,8 @@ const login = asyncHandler(async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {
     return res.json({
-      _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -37,14 +35,12 @@ const register = asyncHandler(async (req, res) => {
     // throw new Error('User already Exist');
   }
 
-  const user = await User.create({ name, email, password, role });
+  const user = await User.create({ name, email, password });
 
   if (user) {
     res.status(201).json({
-      _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -80,8 +76,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       role: updatedUser.role,
-      token: generateToken(updatedUser._id), //token should already be there
-      //can use updatedUser.token
+      token: generateToken(updatedUser._id)
     });
   } else {
     res.status(404);
@@ -91,22 +86,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 const getBusiness = asyncHandler(async (req, res) => {
   try {
-    const businesses = await Business.find().select("-clients");
-    const allBusinesses = {
-      gym: [],
-      trainer: [],
-      dietician: [],
-    };
-    businesses.forEach((business) => {
-      if (business.businessType === "gym") {
-        allBusinesses.gym.push(business);
-      } else if (business.businessType === "trainer") {
-        allBusinesses.trainer.push(business);
-      } else if (business.businessType === "dietician") {
-        allBusinesses.dietician.push(business);
-      }
-    });
-    return res.json(allBusinesses);
+    const businesses = await Business.find();
+    
+    return res.json(businesses);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");

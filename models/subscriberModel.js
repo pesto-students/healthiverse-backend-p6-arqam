@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
-const { Schema } = mongoose;
 
 const subscriberSchema = new mongoose.Schema(
   {
-    _id: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    s_id: {
+      type: String,
+      required: true,
     },
     name: {
       type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      unique: true,
       required: true,
     },
     about: {
@@ -38,8 +42,9 @@ const subscriberSchema = new mongoose.Schema(
     },
     membership: [
       {
-        businessID: String,
+        businessId: {type: String},
         endDate: Date,
+        businessType: String
       },
     ],
     userimage: {

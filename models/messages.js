@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
+
+
 const messageSchema = new mongoose.Schema(
   {
     message: {
@@ -11,7 +13,7 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    senderRole: {
+    senderType: {
       type: String,
       required: true,
     },

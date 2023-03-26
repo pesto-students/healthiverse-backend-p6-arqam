@@ -4,10 +4,12 @@ import Business from "../models/businessModel.js";
 import mongoose from "mongoose";
 
 const createSubscriberProfile = asyncHandler(async (req, res) => {
-  const { _id, name } = req.user;
+  const { _id, name, email } = req.user;
+  console.log(req.user);
+  console.log(req.body);
   const subscriberProfile = await Subscriber.updateOne(
-    { _id: _id },
-    { ...req.body, _id: _id, name: name },
+    { s_id: _id },
+    { ...req.body, s_id: _id, name, email },
     { upsert: true }
   );
   if (subscriberProfile) {
@@ -19,10 +21,9 @@ const createSubscriberProfile = asyncHandler(async (req, res) => {
 
 const getSubscriberProfile = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const subscriberProfile = await Subscriber.findOne({ _id: _id });
+  const subscriberProfile = await Subscriber.findOne({ s_id: _id });
   if (subscriberProfile) {
     const profile = {
-      _id: subscriberProfile._id,
       about: subscriberProfile.about,
       height: subscriberProfile.height,
       weight: subscriberProfile.weight,
@@ -36,71 +37,36 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
 });
 
 const buyMembership = asyncHandler(async (req, res) => {
-  const { id, endDate } = req.body;
-  const businessID = mongoose.Types.ObjectId(id);
+  const { id, endDate, businessType } = req.body;
+  const businessId = mongoose.Types.ObjectId(id);
   const subscriberID = req.user._id;
 
-  const subscriber = await Subscriber.findOne({ _id: subscriberID });
-  const business = await Business.findOne({ _id: businessID });
-
+  const subscriber = await Subscriber.findOne({ s_id: subscriberID });
+  const business = await Business.findOne({ _id: businessId });
+ 
   if (subscriber && business) {
     subscriber.membership.push({
-      businessID: businessID,
+      businessId: businessId,
       endDate: endDate,
+      businessType: businessType 
     });
-
+    console.log(subscriber.membership);
     const updatedSubsciber = await subscriber.save();
 
-    res.send(200).json({ message: updatedSubsciber.membership });
+    res.status(200).json({ message: "Success" });
   } else {
-    res.status(400).send("Subscriber not found");
+    res.status(400).json({message: "Subscriber not found"});
   }
 });
 
 const getAllMembership = asyncHandler(async (req, res) => {
   try {
-    const gymBusinesses = [];
-    const trainerBusinesses = [];
-    const dieticianBusinesses = [];
     const { _id } = req.user;
-    const subscriber = await Subscriber.findById({ _id: _id })
-      .select("membership")
-      .select("-_id");
-
+    const subscriber = await Subscriber.findOne({ s_id: _id });
     const memberships = subscriber.membership;
-    let businessIds = memberships.map((membership) => membership.businessID);
-    const businessIdsobj = businessIds.map(mongoose.Types.ObjectId);
-    const businesses = await Business.find({
-      _id: { $in: businessIdsobj },
-    })
-      .select("-clients")
-      .select("-membership");
-    businesses.forEach((business) => {
-      const memberarray = memberships.find(
-        (m) => m.businessID === business._id.toString()
-      );
-      const businessWithEndDate = {
-        ...business._doc,
-        enddate: memberarray.endDate,
-      };
-
-      if (business.businessType === "gym") {
-        gymBusinesses.push(businessWithEndDate);
-      } else if (business.businessType === "trainer") {
-        trainerBusinesses.push(businessWithEndDate);
-      } else if (business.businessType === "dietician") {
-        dieticianBusinesses.push(businessWithEndDate);
-      }
-    });
-    const response = {
-      gym: gymBusinesses,
-      trainer: trainerBusinesses,
-      dietician: dieticianBusinesses,
-    };
-    return res.json(response);
+    return res.json(memberships);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+    res.status(500).json({message: "Server error"});
   }
 });
 
