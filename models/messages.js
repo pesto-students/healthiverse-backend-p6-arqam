@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcryptjs';
-
-
 
 const messageSchema = new mongoose.Schema(
   {
@@ -33,17 +30,7 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-messageSchema.methods.matchRoomId = function (enteredRoomId) {
-  return bcrypt.compare(enteredRoomId, this.roomId);
-};
 
-messageSchema.pre('save', async function (next) {
-  if (!this.isModified('roomId')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.roomId = await bcrypt.hash(this.roomId, salt);
-});
 
 const Message = mongoose.model("Message", messageSchema);
 export default Message;
