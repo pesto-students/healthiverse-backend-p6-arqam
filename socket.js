@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
-import { getMessages, saveMessage } from "./controllers/messageController.js";
+import { createRoom, getMessages, saveMessage } from "./controllers/messageController.js";
 
 const socketio = (server) => {
   const io = new Server(server, {
@@ -35,11 +35,11 @@ const socketio = (server) => {
       if (senderType === "subscriber") {
         roomId = senderId + "+" + receiver._id + "+" + receiver.s_id;
       } else {
-        // roomId = receiver.s_id + "+" + receiver.businessId + "+" + senderId;
+        roomId = receiver.s_id + "+" + receiver.businessId + "+" + senderId;
       }
       console.log(roomId);
       socket.join(roomId);
-
+      createRoom(roomId);
       getMessages(roomId).then((messages) => {
         socket.emit("last_50_messages", messages);
       });

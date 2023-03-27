@@ -1,25 +1,41 @@
 import Message from "../models/messages.js";
 
-const saveMessage = async (data) => {
+const createRoom = async (roomId) => {
   try {
-   
-    
-    const message = await Message.create(data);
-    return message;
+    const chat = await Chat.create({ roomId: roomId });
+    return chat;
   } catch (err) {
     // console.log(err);
     throw new Error(err);
   }
 };
 
+const saveMessage = async (data) => {
+  try {
+    const { roomId } = data;
+    const message = {
+      name: data.name,
+      message: data.message,
+      senderType: data.senderType,
+      receiverId: data.receiverId,
+      __createdTime__: data.__createdTime__,
+    };
+    const chat = await Chat.findOne({ roomId: roomId });
+    chat.messages.push(message);
+    const updatedChat = await chat.save();
+    return updatedChat;
+  } catch (err) {
+    // console.log(err);
+    throw new Error(err);
+  }
+};
+
+
 const getMessages = async (roomId) => {
   try {
-    const allMessages = await Message.find({}).sort({ __createdTime__: 1 });
-    const roomMessages = await allMessages.filter((message) => {
-      return message.matchRoomId(roomId);
-    });
-    const last50 =  roomMessages.slice(-50);
-    console.log(last50);
+    const chat = await Chat.findOne({ roomId: roomId });
+    const allMessages = chat.messages;
+    const last50 = allMessages.slice(-50);
     return last50;
   } catch (err) {
     console.log(err);
@@ -27,4 +43,4 @@ const getMessages = async (roomId) => {
   }
 };
 
-export { getMessages, saveMessage };
+export {createRoom, getMessages, saveMessage };
