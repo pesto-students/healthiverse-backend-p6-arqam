@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
 const connectDb = async () => {
-  const URL = process.env.MONGO_URI;
+  const URL = process.env['MONGO_URI']
+  // const URL = process.env['MONGO_URI'];
+  console.log(URL);
   try {
     await mongoose.connect(URL, {
       useNewUrlParser: true,

@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
-const PORT = process.env.PORT;
+const PORT = process.env['PORT'];
 const server = app.listen(PORT, () =>
   console.log(`Server is Running on Port ${PORT}`)
 );

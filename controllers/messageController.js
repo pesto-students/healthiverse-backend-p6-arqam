@@ -1,9 +1,11 @@
-import Message from "../models/messages.js";
+import Chat from "../models/chats.js";
 
 const createRoom = async (roomId) => {
   try {
+    const existingChat = await Chat.findOne({roomId: roomId});
+    if(!existingChat){
     const chat = await Chat.create({ roomId: roomId });
-    return chat;
+    }
   } catch (err) {
     // console.log(err);
     throw new Error(err);
@@ -43,4 +45,5 @@ const getMessages = async (roomId) => {
   }
 };
 
-export {createRoom, getMessages, saveMessage };
+
+export { createRoom, getMessages, saveMessage };

@@ -70,9 +70,27 @@ const getAllMembership = asyncHandler(async (req, res) => {
   }
 });
 
+const getSubscriberChats = asyncHandler(async (req,res)=>{
+  const {_id} = req.user;
+  const chats = await Chat.find({"roomId" : {$regex:_id}})
+    .sort({updatedAt: -1});
+  console.log(chats);
+  const businessIds = chats.map(chat=>{
+    return chat.roomId.split('+')[1];
+  });
+  const businesses = Business.find({id :{$in : businessIds}});
+  if(businesses){
+    res.status(200).json(businesses);
+  }else{
+    res.status(400).json({message: "Chat history not found"});
+  }
+  
+})
+
 export {
   createSubscriberProfile,
   getSubscriberProfile,
   buyMembership,
   getAllMembership,
+  getSubscriberChats
 };

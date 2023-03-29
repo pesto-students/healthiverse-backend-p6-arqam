@@ -5,12 +5,14 @@ import {
   getSubscriberProfile,
   buyMembership,
   getAllMembership,
+  getSubscriberChats
 } from "../controllers/subscriberController.js";
 
 const subscriberRouter = express.Router();
 
 subscriberRouter.get("/", getSubscriberProfile);
 subscriberRouter.get("/allmemberships", getAllMembership);
+subscriberRouter.get("/chats", getSubscriberChats);
 
 subscriberRouter.post("/", createSubscriberProfile);
 
