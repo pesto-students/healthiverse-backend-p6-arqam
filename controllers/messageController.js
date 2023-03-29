@@ -37,6 +37,7 @@ const saveMessage = async (data) => {
 
 const getMessages = async (roomId) => {
   try {
+    console.log(roomId);
     const chat = await Chat.findOne({ roomId: roomId });
     const allMessages = chat.messages;
     const last50 = allMessages.slice(-50);

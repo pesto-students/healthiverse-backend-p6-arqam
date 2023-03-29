@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
-import { createRoom, getMessages, saveMessage } from "./controllers/messageController.js";
+import {  getMessages, saveMessage } from "./controllers/messageController.js";
 
 const socketio = (server) => {
   const io = new Server(server, {

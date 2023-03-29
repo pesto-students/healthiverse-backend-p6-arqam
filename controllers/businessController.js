@@ -1,6 +1,7 @@
 import Business from "../models/businessModel.js";
 import Subscriber from "../models/subscriberModel.js";
 import asyncHandler from "express-async-handler";
+import Chat from "../models/chats.js";
 
 const createBusinessProfile = asyncHandler(async (req, res) => {
   const { email } = req.user;
@@ -57,4 +58,36 @@ const getClients = asyncHandler(async (req, res) => {
   }
 });
 
-export { createBusinessProfile, getBusinessProfile, getClients, editBusinessProfile };
+const getBusinessChats = asyncHandler(async (req, res) => {
+  const {_id} = req.user;
+  
+  const chats = await Chat.find({"roomId" : {$regex:_id}})
+    .sort({updatedAt: -1});
+  console.log(chats);
+  const chatHistory = [];
+  for(const chat of chats){
+    const messages = chat.messages;
+    const lastMessage = messages[messages.length-1];
+    const subscriberId = chat.roomId.split('+')[0];
+    const businessId = chat.roomId.split('+')[1];
+    const parentBusinessId = chat.roomId.split('+')[2];
+    console.log(_id);
+    console.log(businessId);
+    console.log(parentBusinessId);
+    if(_id == parentBusinessId){
+      console.log("Same Ids");
+      const subscriber = await Subscriber.findOne({s_id : subscriberId}).select("-membership");
+      // subscriber.businessId = businessId;
+      // console.log(subscriber.businessId);
+      chatHistory.push({subscriber: {...subscriber, businessId}, lastMessage});
+    }
+  }
+  console.log(chatHistory);
+  if(chatHistory){
+    res.status(200).json(chatHistory);
+  }else{
+    res.status(400).json({message: "Chat history not found"});
+  }
+})
+
+export { createBusinessProfile, getBusinessProfile, getClients, editBusinessProfile, getBusinessChats };

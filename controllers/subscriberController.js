@@ -82,10 +82,13 @@ const getSubscriberChats = asyncHandler(async (req, res) => {
   for(const chat of chats){
     const messages = chat.messages;
     const lastMessage = messages[messages.length-1];
+    const subscriberId = chat.room.split('+')[0];
     const businessId = chat.roomId.split('+')[1];
     console.log(businessId);
+    if(_id===subscriberId){
     const business = await Business.findOne({_id : businessId});
     chatHistory.push({business, lastMessage});
+  }
   }
   console.log(chatHistory);
   if(chatHistory){
