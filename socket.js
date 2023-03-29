@@ -39,7 +39,6 @@ const socketio = (server) => {
       }
       console.log(roomId);
       socket.join(roomId);
-      createRoom(roomId);
       getMessages(roomId).then((messages) => {
         socket.emit("last_50_messages", messages);
       });

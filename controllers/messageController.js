@@ -4,8 +4,9 @@ const createRoom = async (roomId) => {
   try {
     const existingChat = await Chat.findOne({roomId: roomId});
     if(!existingChat){
-    const chat = await Chat.create({ roomId: roomId });
+      return await Chat.create({ roomId: roomId });
     }
+    return existingChat;
   } catch (err) {
     // console.log(err);
     throw new Error(err);
@@ -15,6 +16,7 @@ const createRoom = async (roomId) => {
 const saveMessage = async (data) => {
   try {
     const { roomId } = data;
+    
     const message = {
       name: data.name,
       message: data.message,
@@ -22,7 +24,7 @@ const saveMessage = async (data) => {
       receiverId: data.receiverId,
       __createdTime__: data.__createdTime__,
     };
-    const chat = await Chat.findOne({ roomId: roomId });
+    const chat = await createRoom(roomId);
     chat.messages.push(message);
     const updatedChat = await chat.save();
     return updatedChat;
@@ -46,4 +48,4 @@ const getMessages = async (roomId) => {
 };
 
 
-export { createRoom, getMessages, saveMessage };
+export { getMessages, saveMessage };

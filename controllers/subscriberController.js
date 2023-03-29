@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Subscriber from "../models/subscriberModel.js";
 import Business from "../models/businessModel.js";
+import Chat from "../models/chats.js";
 import mongoose from "mongoose";
 
 const createSubscriberProfile = asyncHandler(async (req, res) => {
@@ -70,18 +71,23 @@ const getAllMembership = asyncHandler(async (req, res) => {
   }
 });
 
-const getSubscriberChats = asyncHandler(async (req,res)=>{
+const getSubscriberChats = asyncHandler(async (req, res) => {
+  console.log("Hi");
   const {_id} = req.user;
+  console.log(_id);
   const chats = await Chat.find({"roomId" : {$regex:_id}})
     .sort({updatedAt: -1});
   console.log(chats);
-  const chatHistory = chats.map(chat=>{
+  const chatHistory = [];
+  for(const chat of chats){
     const messages = chat.messages;
     const lastMessage = messages[messages.length-1];
     const businessId = chat.roomId.split('+')[1];
-    const business = Business.findOne({id : businessId});
-    return {business, lastMessage};
-  });
+    console.log(businessId);
+    const business = await Business.findOne({_id : businessId});
+    chatHistory.push({business, lastMessage});
+  }
+  console.log(chatHistory);
   if(chatHistory){
     res.status(200).json(chatHistory);
   }else{
@@ -94,5 +100,5 @@ export {
   getSubscriberProfile,
   buyMembership,
   getAllMembership,
-  getSubscriberChats
+  getSubscriberChats,
 };
