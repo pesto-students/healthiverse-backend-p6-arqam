@@ -79,20 +79,30 @@ const getSubscriberChats = asyncHandler(async (req, res) => {
     .sort({updatedAt: -1});
   console.log(chats);
   const chatHistory = [];
+  const businesses = [];
   for(const chat of chats){
     const messages = chat.messages;
     const lastMessage = messages[messages.length-1];
-    const subscriberId = chat.room.split('+')[0];
+    const subscriberId = chat.roomId.split('+')[0];
     const businessId = chat.roomId.split('+')[1];
     console.log(businessId);
-    if(_id===subscriberId){
-    const business = await Business.findOne({_id : businessId});
-    chatHistory.push({business, lastMessage});
+    if(_id==subscriberId){
+      const business = await Business.findOne({_id : businessId});
+        businesses.push(business);
+      chatHistory.push(lastMessage);
+     }
   }
+  const chatHistoryWithBusinesses = [];
+  const businessResponses = await Promise.all(businesses);
+  // console.log(subscriberResponses);
+  for(let i=0; i<businessResponses.length; i++){
+      const business = businessResponses[i];
+    const lastMessage = chatHistory[i];
+    chatHistoryWithBusinesses.push({business, lastMessage});
   }
-  console.log(chatHistory);
+  console.log(chatHistoryWithBusinesses);
   if(chatHistory){
-    res.status(200).json(chatHistory);
+    res.status(200).json(chatHistoryWithBusinesses);
   }else{
     res.status(400).json({message: "Chat history not found"});
   }
