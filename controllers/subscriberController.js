@@ -75,16 +75,18 @@ const getSubscriberChats = asyncHandler(async (req,res)=>{
   const chats = await Chat.find({"roomId" : {$regex:_id}})
     .sort({updatedAt: -1});
   console.log(chats);
-  const businessIds = chats.map(chat=>{
-    return chat.roomId.split('+')[1];
+  const chatHistory = chats.map(chat=>{
+    const messages = chat.messages;
+    const lastMessage = messages[messages.length-1];
+    const businessId = chat.roomId.split('+')[1];
+    const business = Business.findOne({id : businessId});
+    return {business, lastMessage};
   });
-  const businesses = Business.find({id :{$in : businessIds}});
-  if(businesses){
-    res.status(200).json(businesses);
+  if(chatHistory){
+    res.status(200).json(chatHistory);
   }else{
     res.status(400).json({message: "Chat history not found"});
   }
-  
 })
 
 export {
