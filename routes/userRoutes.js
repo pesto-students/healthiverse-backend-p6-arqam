@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.get("/", protect, admin, getUsers);
-router.put("/", protect, updateUserProfile);
+router.put("/update", protect, updateUserProfile);
 router.get("/getbusiness", getBusiness);
 
 router.use("/subscriber", protect, subscriberRouter);
