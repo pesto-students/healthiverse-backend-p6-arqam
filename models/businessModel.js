@@ -56,7 +56,7 @@ const businessSchema = new mongoose.Schema(
         required: true,
       },
     },
-    userimage: {
+    userImage: {
       Type: String,
     },
   },

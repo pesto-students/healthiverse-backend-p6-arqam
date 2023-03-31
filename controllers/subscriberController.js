@@ -31,6 +31,7 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
       lifestyle: subscriberProfile.lifestyle,
       goals: subscriberProfile.goals,
       mode: subscriberProfile.mode,
+      userImage: subscriberProfile.userImage
     };
     return res.status(200).json(profile);
   }
