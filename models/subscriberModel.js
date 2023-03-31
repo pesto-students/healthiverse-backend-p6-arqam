@@ -42,12 +42,12 @@ const subscriberSchema = new mongoose.Schema(
     },
     membership: [
       {
-        businessId: {type: String},
+        businessId: { type: String },
         endDate: Date,
         businessType: String
       },
     ],
-    userimage: {
+    userImage: {
       Type: String,
     },
   },

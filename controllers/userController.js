@@ -87,7 +87,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 const getBusiness = asyncHandler(async (req, res) => {
   try {
     const businesses = await Business.find();
-    
+
     return res.json(businesses);
   } catch (error) {
     console.error(error);
