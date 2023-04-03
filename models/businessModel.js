@@ -56,9 +56,16 @@ const businessSchema = new mongoose.Schema(
         required: true,
       },
     },
+    reviews: [{
+      subscriberId: { type: String },
+      rating: { type: Number },
+      comment: { type: String },
+    }],
+    averageRating: { type: Number },
     userImage: {
       Type: String,
     },
+    otherImages: [{ type: String }],
   },
   { timestamps: true }
 );

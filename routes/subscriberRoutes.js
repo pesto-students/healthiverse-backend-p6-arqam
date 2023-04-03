@@ -5,7 +5,9 @@ import {
   getSubscriberProfile,
   buyMembership,
   getAllMembership,
-  getSubscriberChats
+  getSubscriberChats,
+  postReview,
+  deleteReview
 } from "../controllers/subscriberController.js";
 
 const subscriberRouter = express.Router();
@@ -17,5 +19,7 @@ subscriberRouter.get("/chats", getSubscriberChats);
 subscriberRouter.post("/", createSubscriberProfile);
 
 subscriberRouter.post("/buy", buyMembership);
+subscriberRouter.post("/review", postReview);
+subscriberRouter.put("/review/delete", deleteReview);
 
 export default subscriberRouter;
