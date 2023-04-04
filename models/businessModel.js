@@ -22,7 +22,7 @@ const businessSchema = new mongoose.Schema(
       type: String,
     },
     contact: {
-      type: Number,
+      type: String,
       required: true,
     },
     businessType: {
@@ -58,6 +58,8 @@ const businessSchema = new mongoose.Schema(
     },
     reviews: [{
       subscriberId: { type: String },
+      subscriberName: {type: String},
+      subscriberImage: {type: String},
       rating: { type: Number },
       comment: { type: String },
     }],

@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import Business from "../models/businessModel.js";
+import Subscriber from "../models/subscriberModel.js";
 
 //@desc     Auth User & Get Token
 //@route    POST api/users/login
@@ -96,6 +97,7 @@ const getBusiness = asyncHandler(async (req, res) => {
   }
 });
 
+
 const getAdminBoard = asyncHandler(async (req, res) => {
   res.status(200).send("Admin Board Content");
 });
@@ -106,5 +108,5 @@ export {
   getUsers,
   updateUserProfile,
   getBusiness,
-  getAdminBoard,
+  getAdminBoard
 };

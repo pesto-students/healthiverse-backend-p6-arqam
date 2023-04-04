@@ -111,10 +111,14 @@ const getSubscriberChats = asyncHandler(async (req, res) => {
 
 const postReview = asyncHandler(async (req,res)=>{
   const {_id} = req.user;
-  console.log(req.body);
+  console.log(_id);
+  const subscriber = await Subscriber.findOne({s_id:_id});
+  console.log(`Subscriber name: ${subscriber.name}`);
   const {businessId, rating, comment} = req.body;
   const review = {
       subscriberId: _id,
+      subscriberName: subscriber.name,
+      subscriberImage: subscriber.userImage,
       rating: rating,
       comment: comment
     }
@@ -166,7 +170,9 @@ const deleteReview = asyncHandler(async(req,res)=>{
   }else{
     res.status(400).json({message: "Error in deleting review"});
   }
-})
+});
+
+
 
 export {
   createSubscriberProfile,

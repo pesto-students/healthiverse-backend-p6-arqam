@@ -5,7 +5,7 @@ import {
   register,
   updateUserProfile,
   getBusiness,
-  getAdminBoard,
+  getAdminBoard
 } from "../controllers/userController.js";
 import subscriberRouter from "./subscriberRoutes.js";
 import businessRouter from "./businessRoutes.js";
