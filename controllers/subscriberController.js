@@ -25,6 +25,7 @@ const getSubscriberProfile = asyncHandler(async (req, res) => {
   const subscriberProfile = await Subscriber.findOne({ s_id: _id });
   if (subscriberProfile) {
     const profile = {
+      name: subscriberProfile.name,
       about: subscriberProfile.about,
       height: subscriberProfile.height,
       weight: subscriberProfile.weight,
@@ -73,12 +74,12 @@ const getAllMembership = asyncHandler(async (req, res) => {
 });
 
 const getSubscriberChats = asyncHandler(async (req, res) => {
-  console.log("Hi");
+ 
   const {_id} = req.user;
-  console.log(_id);
+  // console.log(_id);
   const chats = await Chat.find({"roomId" : {$regex:_id}})
     .sort({updatedAt: -1});
-  console.log(chats);
+  // console.log(chats);
   const chatHistory = [];
   const businesses = [];
   for(const chat of chats){
@@ -86,7 +87,7 @@ const getSubscriberChats = asyncHandler(async (req, res) => {
     const lastMessage = messages[messages.length-1];
     const subscriberId = chat.roomId.split('+')[0];
     const businessId = chat.roomId.split('+')[1];
-    console.log(businessId);
+    // console.log(businessId);
     if(_id==subscriberId){
       const business = await Business.findOne({_id : businessId});
         businesses.push(business);
@@ -101,7 +102,7 @@ const getSubscriberChats = asyncHandler(async (req, res) => {
     const lastMessage = chatHistory[i];
     chatHistoryWithBusinesses.push({business, lastMessage});
   }
-  console.log(chatHistoryWithBusinesses);
+  // console.log(chatHistoryWithBusinesses);
   if(chatHistory){
     res.status(200).json(chatHistoryWithBusinesses);
   }else{
