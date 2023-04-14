@@ -5,6 +5,7 @@ import connectDb from "./db.js";
 import cors from "cors";
 import socketio from "./socket.js";
 import userRoutes from "./routes/userRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 dotenv.config();
 connectDb();
 
@@ -20,6 +21,7 @@ const server = app.listen(PORT, () =>
 const io = socketio(server);
 
 app.use("/api/users", userRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello World" });
