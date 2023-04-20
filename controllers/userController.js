@@ -19,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    return res.status(401).json({ message: "Invalid email or Password" });
+    return user ? res.status(401).json({ message: "Invalid Password" }):res.status(401).json({ message: "Email is not registered" });
     // throw new Error('Invalid email or Password');
   }
 });
